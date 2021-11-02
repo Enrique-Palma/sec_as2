@@ -24,7 +24,7 @@ char* my_strcat(char* strg1, char* strg2)
 }
 
 //checkStringLength function
-unsigned int checkStringLength(const char* s)
+int checkStringLength(const char* s)
 {
 	unsigned int count = 0;
 	while (*s != '\0')
@@ -89,7 +89,7 @@ unsigned long int calc32bit(char* input)
 int main(int argc, char** argv)
 {
 	FILE* inputfile;
-	char* input, * output, * checksum, c = 'x';
+	char* input, c = 'x';
 	unsigned long int res8bit = 0;
 	unsigned long int res16bit = 0;
 	unsigned long int res32bit = 0;
@@ -111,8 +111,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	// Open the input file	
-
+	// Open the input file
 	inputfile = fopen(argv[1], "r");
 
 	if (inputfile == NULL)
@@ -166,7 +165,10 @@ int main(int argc, char** argv)
 			break;
 	}
 
+	free(input);
+
 	return 0;
 }
 
-///commentsadsadad asdas dasd
+//test
+
