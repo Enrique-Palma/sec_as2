@@ -146,7 +146,7 @@ int main(int argc, char** argv)
 			// Pad with a necessary X
 			if (checkStringLength(input) % 2)
 				my_strcat(input, "X");
-			//strcat(input, "X");
+			
 			print80(input);
 			printf("\n");
 			res16bit = calc16bit(input);
@@ -157,7 +157,7 @@ int main(int argc, char** argv)
 			// Pad with necessary X's
 			while (checkStringLength(input) % 4)
 				my_strcat(input, "X");
-			//strcat(input, "X");
+			
 			print80(input);
 			printf("\n");
 			res32bit = calc32bit(input);
@@ -168,3 +168,5 @@ int main(int argc, char** argv)
 
 	return 0;
 }
+
+///commentsadsadad asdas dasd
