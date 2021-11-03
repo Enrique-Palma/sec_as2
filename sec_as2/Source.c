@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 
 	// Make sure checksum size is correct
 	checksum_size = myAtoi(argv[2]);
-	if(!(checksum_size == 8 || checksum_size == 16 || checksum_size == 32))
+	if (!(checksum_size == 8 || checksum_size == 16 || checksum_size == 32))
 	{
 		fprintf(stderr, "Valid checksum sizes are 8, 16, or 32\n");
 		return -1;
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 
 	// Open the input file
 	fileOpen_ptr = fopen(argv[1], "r");
-	if(fileOpen_ptr == NULL)
+	if (fileOpen_ptr == NULL)
 	{
 		fprintf(stdout, "Cannot connect to the specified files.");
 		exit(0);
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 
 	// Read in the input file
 	textFile = calloc(sizeof(textFile), 1024);
-	while((c = getc(fileOpen_ptr)) != EOF)
+	while ((c = getc(fileOpen_ptr)) != EOF)
 	{
 		textFile[i] = c;
 		i++;
@@ -54,16 +54,15 @@ int main(int argc, char** argv)
 	// Close the file
 	fclose(fileOpen_ptr);
 
-	if(checksum_size == 8)
+	if (checksum_size == 8)
 	{
 		res8bit = calc8bit(textFile);
 		print80(textFile);
 		printf("\n");
 		// Use 0xff masking to display only last 2 hex values
 		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res8bit & 0xff, (int)checkStringLength(textFile));
-		//break;
 	}
-	else if(checksum_size == 16)
+	else if (checksum_size == 16)
 	{
 		// Pad with a necessary X
 		if (checkStringLength(textFile) % 2)
@@ -75,11 +74,10 @@ int main(int argc, char** argv)
 		res16bit = calc16bit(textFile);
 		// Use 0xffff masking to display only last 4 hex values
 		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res16bit & 0xffff, (int)checkStringLength(textFile));
-		//break;
 	}
-	else if(checksum_size)
+	else if (checksum_size)
 	{
-			// Pad with necessary X's
+		// Pad with necessary X's
 		while (checkStringLength(textFile) % 4)
 		{
 			my_strcat(textFile, "X");
@@ -89,11 +87,10 @@ int main(int argc, char** argv)
 		res32bit = calc32bit(textFile);
 		// Use 0xffffffff masking to display only last 8 hex values
 		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res32bit & 0xffffffff, (int)checkStringLength(textFile));
-		//break;
 	}
 	else
 	{
-		fprintf(stdout, "error");	
+		fprintf(stdout, "error");
 	}
 
 	free(textFile);
@@ -114,11 +111,11 @@ void argumentsCheck(int argc)
 // A simple atoi() function
 int myAtoi(char* str)
 {
-	int res = 0;	
+	int res = 0;
 	for (int i = 0; str[i] != '\0'; ++i)
 	{
 		res = res * 10 + str[i] - '0';
-	}	
+	}
 	return res;
 }
 
