@@ -7,7 +7,7 @@ void argumentsCheck(int argc);
 int myAtoi(char* str);
 char* my_strcat(char* strg1, char* strg2);
 int checkStringLength(const char* s);
-void print80(char* str);
+void paddingMax80Chars(char* str);
 unsigned long int calc8bit(char* input);
 unsigned long int calc16bit(char* input);
 unsigned long int calc32bit(char* input);
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 	if (checksum_size == 8)
 	{
 		res8bit = calc8bit(textFile);
-		print80(textFile);
+		paddingMax80Chars(textFile);
 		printf("\n");
 		// Use 0xff masking to display only last 2 hex values
 		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res8bit & 0xff, (int)checkStringLength(textFile));
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 		{
 			my_strcat(textFile, "X");
 		}
-		print80(textFile);
+		paddingMax80Chars(textFile);
 		printf("\n");
 		res16bit = calc16bit(textFile);
 		// Use 0xffff masking to display only last 4 hex values
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 		{
 			my_strcat(textFile, "X");
 		}
-		print80(textFile);
+		paddingMax80Chars(textFile);
 		printf("\n");
 		res32bit = calc32bit(textFile);
 		// Use 0xffffffff masking to display only last 8 hex values
@@ -152,13 +152,17 @@ int checkStringLength(const char* s)
 }
 
 // Function that prints 80 characters per line
-void print80(char* str)
+void paddingMax80Chars(char* str)
 {
-	for (int i = 0; i < checkStringLength(str); i++)
+	int i = 0;
+	while (str[i] != 0)
 	{
 		if (i % 80 == 0)
+		{
 			printf("\n");
+		}
 		printf("%c", str[i]);
+		i++;
 	}
 }
 
