@@ -170,9 +170,11 @@ void paddingMax80Chars(char* str)
 unsigned long int calc8bit(char* input)
 {
 	int result = 0;
-	for (int i = 0; i < checkStringLength(input); i++)
+	int i = 0;
+	while (i < checkStringLength(input))
 	{
 		result += input[i];
+		i++;
 	}
 	return result;
 }
@@ -181,12 +183,13 @@ unsigned long int calc8bit(char* input)
 unsigned long int calc16bit(char* input)
 {
 	int res16bit = 0;
-	for (int i = 0; i < checkStringLength(input);)
+	int i = 0;
+	while (i < checkStringLength(input))
 	{
 		res16bit += input[i] << 8;
 		res16bit += (input[i + 1]);
 		i += 2;
-	}
+	}	
 	return res16bit;
 }
 
@@ -194,14 +197,14 @@ unsigned long int calc16bit(char* input)
 unsigned long int calc32bit(char* input)
 {
 	unsigned long int res32bit = 0;
-	for (int i = 0; i < checkStringLength(input);)
-	{
-		res32bit += input[i] << 24;
-		res32bit += (input[i + 1]) << 16;
-		res32bit += (input[i + 2]) << 8;
-		res32bit += (input[i + 3]);
-		i += 4;
-	}
-
+	int i = 0;
+	while(i < checkStringLength(input))
+		{
+			res32bit += input[i] << 24;
+			res32bit += (input[i + 1]) << 16;
+			res32bit += (input[i + 2]) << 8;
+			res32bit += (input[i + 3]);
+			i += 4;
+		}
 	return res32bit;
 }
