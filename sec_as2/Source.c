@@ -5,34 +5,35 @@
 
 #define MAX 1024
 
+//Function prototypes
 void argumentsCheck(int argc);
 int stringToInteger(char* str);
 char* stringAppend(char* strg1, char* strg2);
 int checkStringLength(const char* s);
 void paddingMax80Chars(char* str);
-long int calc8bit(char* input);
-long int calc16bit(char* input);
-long int calc32bit(char* input);
+long int eightBits(char* input);
+long int sixteenBits(char* input);
+long int thirtyTwoBits(char* input);
 
 int main(int argc, char** argv)
 {
 	FILE* fileOpen_ptr;
 	char* textFile;
 	char c = 'x';
-	long int res8bit = 0;
-	long int res16bit = 0;
-	long int res32bit = 0;
+	long int main8bit = 0;
+	long int main16bit = 0;
+	long int main32bit = 0;
 	int i = 0;
-	int checksum_size = 0;
+	int checksumSizeCheck = 0;
 
 	//function call for arguments checker
 	argumentsCheck(argc);
 
 	// Make sure checksum size is correct
-	checksum_size = stringToInteger(argv[2]);
-	if(!(checksum_size == 8 || checksum_size == 16 || checksum_size == 32))
+	checksumSizeCheck = stringToInteger(argv[2]);
+	if(!(checksumSizeCheck == 8 || checksumSizeCheck == 16 || checksumSizeCheck == 32))
 	{
-		fprintf(stderr, "Valid checksum sizes are 8, 16, or 32\n");
+		fprintf(stderr, "Correct checksum sizes are 8, 16, or 32\n");
 		return -1;
 	}
 
@@ -40,7 +41,7 @@ int main(int argc, char** argv)
 	fileOpen_ptr = fopen(argv[1], "r");
 	if(fileOpen_ptr == NULL)
 	{
-		fprintf(stdout, "Cannot connect to the specified files.");
+		fprintf(stdout, "Cannot connect to the specified files.\n");
 		exit(0);
 	}
 
@@ -56,15 +57,15 @@ int main(int argc, char** argv)
 	// Close the file
 	fclose(fileOpen_ptr);
 
-	if(checksum_size == 8)
+	if(checksumSizeCheck == 8)
 	{
-		res8bit = calc8bit(textFile);
+		main8bit = eightBits(textFile);
 		paddingMax80Chars(textFile);
 		printf("\n");
 		// Use 0xff masking to display only last 2 hex values
-		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res8bit & 0xff, checkStringLength(textFile));
+		printf("%2d bit checksum is %8lx for all %4d chars\n", checksumSizeCheck, main8bit & 0xff, checkStringLength(textFile));
 	}
-	else if(checksum_size == 16)
+	else if(checksumSizeCheck == 16)
 	{
 		// Pad with a necessary X
 		if(checkStringLength(textFile) % 2)
@@ -73,11 +74,11 @@ int main(int argc, char** argv)
 		}
 		paddingMax80Chars(textFile);
 		printf("\n");
-		res16bit = calc16bit(textFile);
+		main16bit = sixteenBits(textFile);
 		// Use 0xffff masking to display only last 4 hex values
-		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res16bit & 0xffff, checkStringLength(textFile));
+		printf("%2d bit checksum is %8lx for all %4d chars\n", checksumSizeCheck, main16bit & 0xffff, checkStringLength(textFile));
 	}
-	else if(checksum_size)
+	else if(checksumSizeCheck)
 	{
 		// Pad with necessary X's
 		while (checkStringLength(textFile) % 4)
@@ -86,9 +87,9 @@ int main(int argc, char** argv)
 		}
 		paddingMax80Chars(textFile);
 		printf("\n");
-		res32bit = calc32bit(textFile);
+		main32bit = thirtyTwoBits(textFile);
 		// Use 0xffffffff masking to display only last 8 hex values
-		printf("%2d bit checksum is %8lx for all %4d chars\n", checksum_size, res32bit & 0xffffffff, checkStringLength(textFile));
+		printf("%2d bit checksum is %8lx for all %4d chars\n", checksumSizeCheck, main32bit & 0xffffffff, checkStringLength(textFile));
 	}
 	else
 	{
@@ -104,7 +105,7 @@ void argumentsCheck(int argc)
 {
 	if(argc != 3)
 	{
-		fprintf(stdout, "To run this program Please run as `checksum.c filename.txt 8/16/32`\n");
+		fprintf(stdout, "To Run Program ->  `checksum.c filename.txt 8/16/32`\n");
 		exit(0);
 	}
 }
@@ -167,45 +168,45 @@ void paddingMax80Chars(char* str)
 	}
 }
 
-// 8 bit checksum from the input string
-long int calc8bit(char* input)
+// 8 bit checksum calcualtion
+long int eightBits(char* input)
 {
 	int result8bit = 0;
 	int i = 0;
 	while(i < checkStringLength(input))
 	{
-		result8bit += input[i];
+		result8bit = result8bit + input[i];
 		i++;
 	}
 	return result8bit;
 }
 
-// 16 bit checksum from the input string
-long int calc16bit(char* input)
+// 16 bit checksum calcualtion
+long int sixteenBits(char* input)
 {
 	int result16bit = 0;
 	int i = 0;
 	while(i < checkStringLength(input))
 	{
-		result16bit += input[i] << 8;
-		result16bit += (input[i + 1]);
+		result16bit = result16bit + (input[i] << 8);
+		result16bit = result16bit + (input[i + 1]);
 		i += 2;
 	}	
 	return result16bit;
 }
 
-// 32 bit checksum from the input string
-long int calc32bit(char* input)
+// 32 bit checksum calcualtion
+long int thirtyTwoBits(char* input)
 {
 	long int result32bit = 0;
 	int i = 0;
 	while(i < checkStringLength(input))
 		{
-			result32bit += input[i] << 24;
-			result32bit += (input[i + 1]) << 16;
-			result32bit += (input[i + 2]) << 8;
-			result32bit += (input[i + 3]);
-			i += 4;
+			result32bit = result32bit + (input[i] << 24);
+			result32bit = result32bit + ((input[i + 1]) << 16);
+			result32bit = result32bit + ((input[i + 2]) << 8);
+			result32bit = result32bit + (input[i + 3]);
+			i = i + 4;
 		}
 	return result32bit;
 }
