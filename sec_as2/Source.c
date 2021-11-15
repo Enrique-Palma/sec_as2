@@ -1,3 +1,31 @@
+/*=============================================================================
+| Assignment: pa02 - Calculating an 8, 16, or 32 bit
+| checksum on an ASCII input file
+|
+| Author: Enrique Palma
+| Language: c
+|
+| To Compile: javac pa02.java
+| gcc -o pa02 pa02.c
+| g++ -o pa02 pa02.cpp
+|
+| To Execute: java -> java pa02 inputFile.txt 8
+| or c++ -> ./pa02 inputFile.txt 8
+| or c -> ./pa02 inputFile.txt 8
+| where inputFile.txt is an ASCII input file
+| and the number 8 could also be 16 or 32
+| which are the valid checksum sizes, all
+| other values are rejected with an error message
+| and program termination
+|
+| Note: All input files are simple 8 bit ASCII input
+|
+| Class: CIS3360 - Security in Computing - Fall 2021
+| Instructor: McAlpin
+| Due Date: 11/22/2021
+|
++=============================================================================*/
+
 #pragma warning(disable:4996)
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,9 +39,9 @@ int stringToInteger(char* str);
 char* stringAppend(char* strg1, char* strg2);
 int checkStringLength(const char* s);
 void paddingMax80Chars(char* str);
-long int eightBits(char* input);
-long int sixteenBits(char* input);
-long int thirtyTwoBits(char* input);
+long int eightBits(char* user_input8);
+long int sixteenBits(char* user_input16);
+long int thirtyTwoBits(char* user_input32);
 
 int main(int argc, char** argv)
 {
@@ -76,12 +104,12 @@ int main(int argc, char** argv)
 		paddingMax80Chars(textFile);
 		printf("\n");
 		main16bit = sixteenBits(textFile);
-		//  0xffff - only last 4 hex values
+		//  0xffff - only last 4 hex 
 		printf("%2d bit checksum is %8lx for all %4d chars\n", checksumSizeCheck, main16bit & 0xffff, checkStringLength(textFile));
 	}
 	else if(checksumSizeCheck)
 	{
-		// Pad with necessary X's
+		// Pad with X
 		while (checkStringLength(textFile) % 4)
 		{
 			stringAppend(textFile, "X");
@@ -89,7 +117,7 @@ int main(int argc, char** argv)
 		paddingMax80Chars(textFile);
 		printf("\n");
 		main32bit = thirtyTwoBits(textFile);
-		// Use 0xffffffff masking to display only last 8 hex values
+		//  0xffffffff - only last 8 hex 
 		printf("%2d bit checksum is %8lx for all %4d chars\n", checksumSizeCheck, main32bit & 0xffffffff, checkStringLength(textFile));
 	}
 	else
@@ -130,14 +158,12 @@ char* stringAppend(char* strg1, char* strg2)
 	{
 		strg1++;
 	}
-
 	while(*strg2 != '\0')
 	{
 		*strg1 = *strg2;
 		strg1++;
 		strg2++;
 	}
-
 	*strg1 = '\0';
 	return start;
 }
@@ -170,44 +196,53 @@ void paddingMax80Chars(char* str)
 }
 
 // 8 bit checksum calcualtion
-long int eightBits(char* input)
+long int eightBits(char* user_input8)
 {
 	int result8bit = 0;
 	int i = 0;
-	while(i < checkStringLength(input))
+	while(i < checkStringLength(user_input8))
 	{
-		result8bit = result8bit + input[i];
+		result8bit = result8bit + user_input8[i];
 		i++;
 	}
 	return result8bit;
 }
 
 // 16 bit checksum calcualtion
-long int sixteenBits(char* input)
+long int sixteenBits(char* user_input16)
 {
 	int result16bit = 0;
 	int i = 0;
-	while(i < checkStringLength(input))
+	while(i < checkStringLength(user_input16))
 	{
-		result16bit = result16bit + (input[i] << 8);
-		result16bit = result16bit + (input[i + 1]);
+		result16bit = result16bit + (user_input16[i] << 8);
+		result16bit = result16bit + (user_input16[i + 1]);
 		i += 2;
 	}	
 	return result16bit;
 }
 
 // 32 bit checksum calcualtion
-long int thirtyTwoBits(char* input)
+long int thirtyTwoBits(char* user_input32)
 {
 	long int result32bit = 0;
 	int i = 0;
-	while(i < checkStringLength(input))
+	while(i < checkStringLength(user_input32))
 		{
-			result32bit = result32bit + (input[i] << 24);
-			result32bit = result32bit + ((input[i + 1]) << 16);
-			result32bit = result32bit + ((input[i + 2]) << 8);
-			result32bit = result32bit + (input[i + 3]);
+			result32bit = result32bit + (user_input32[i] << 24);
+			result32bit = result32bit + ((user_input32[i + 1]) << 16);
+			result32bit = result32bit + ((user_input32[i + 2]) << 8);
+			result32bit = result32bit + (user_input32[i + 3]);
 			i = i + 4;
 		}
 	return result32bit;
 }
+
+/*=============================================================================
+| I [Enrique Palma] ([en769144]) affirm that this program is
+| entirely my own work and that I have neither developed my code together with
+| any another person, nor copied any code from any other person, nor permitted
+| my code to be copied or otherwise used by any other person, nor have I
+| copied, modified, or otherwise used programs created by others. I acknowledge
+| that any violation of the above terms will be treated as academic dishonesty.
++=============================================================================*/
