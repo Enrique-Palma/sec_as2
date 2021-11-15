@@ -29,12 +29,13 @@ int main(int argc, char** argv)
 	//function call for arguments checker
 	argumentsCheck(argc);
 
-	// Make sure checksum size is correct
+	// checksum check
 	checksumSizeCheck = stringToInteger(argv[2]);
-	if(!(checksumSizeCheck == 8 || checksumSizeCheck == 16 || checksumSizeCheck == 32))
+
+	if(checksumSizeCheck != 8 && checksumSizeCheck != 16 && checksumSizeCheck != 32)
 	{
-		fprintf(stderr, "Correct checksum sizes are 8, 16, or 32\n");
-		return -1;
+		fprintf(stdout, "Correct checksum sizes are 8, 16, or 32\n");
+		exit(0);
 	}
 
 	// Open the input file
@@ -45,7 +46,7 @@ int main(int argc, char** argv)
 		exit(0);
 	}
 
-	// Read in the input file
+	//input file
 	textFile = calloc(sizeof(textFile), MAX);
 	while((c = getc(fileOpen_ptr)) != EOF)
 	{
@@ -54,7 +55,7 @@ int main(int argc, char** argv)
 	}
 	textFile[i] = '\0';
 
-	// Close the file
+	// Close file
 	fclose(fileOpen_ptr);
 
 	if(checksumSizeCheck == 8)
@@ -67,7 +68,7 @@ int main(int argc, char** argv)
 	}
 	else if(checksumSizeCheck == 16)
 	{
-		// Pad with a necessary X
+		// Pad with X
 		if(checkStringLength(textFile) % 2)
 		{
 			stringAppend(textFile, "X");
@@ -75,7 +76,7 @@ int main(int argc, char** argv)
 		paddingMax80Chars(textFile);
 		printf("\n");
 		main16bit = sixteenBits(textFile);
-		// Use 0xffff masking to display only last 4 hex values
+		//  0xffff - only last 4 hex values
 		printf("%2d bit checksum is %8lx for all %4d chars\n", checksumSizeCheck, main16bit & 0xffff, checkStringLength(textFile));
 	}
 	else if(checksumSizeCheck)
